@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const {Sequelize, DataTypes} = require('sequelize');
 
 const database = 's3873827_fsd_a2';
 const username = 's3873827_fsd_a2';
@@ -21,6 +21,17 @@ sequelize
     });
 
 // Define your models and relationships here
+const db = {};
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+
+db.Users = require('./Users')(sequelize, DataTypes);
+
+db.sequelize.sync({force: false})
+.then(() => {
+    console.log("re-sync db.");
+});
+
 
 // Export the sequelize instance
 module.exports = sequelize;
