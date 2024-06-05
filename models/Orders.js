@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
             },
             allowNull: false
         }
+    },
+    {
+        updatedAt: false
     });
 
     Orders.associate = (models) => {

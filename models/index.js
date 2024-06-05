@@ -10,6 +10,8 @@ db.sequelize = sequelize;
 db.Users = require('./Users')(sequelize, Sequelize.DataTypes);
 db.Products = require('./Products')(sequelize, Sequelize.DataTypes);
 db.Reviews = require('./Reviews')(sequelize, Sequelize.DataTypes);
+db.Orders = require('./Orders')(sequelize, Sequelize.DataTypes);
+db.OrderProducts = require('./OrderProducts')(sequelize, Sequelize.DataTypes);
 
 // Define associations
 Object.keys(db).forEach(modelName => {
