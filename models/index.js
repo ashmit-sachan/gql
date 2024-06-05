@@ -8,6 +8,7 @@ const db = {};
 db.sequelize = sequelize;
 
 db.Users = require('./Users')(sequelize, Sequelize.DataTypes);
+db.Products = require('./Products')(sequelize, Sequelize.DataTypes);
 
 db.sequelize.sync({force: false})
 .then(() => {
