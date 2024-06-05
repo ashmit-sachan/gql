@@ -29,4 +29,6 @@ module.exports = (sequelize, DataTypes) => {
     {
         updatedAt: false
     });
+
+    return Users;
 };
