@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Orders.associate = (models) => {
         Orders.belongsTo(models.Users, { foreignKey: 'userId' });
+        Orders.hasMany(models.OrderProducts, { foreignKey: 'OrderId' });
     };
 
     return Orders;

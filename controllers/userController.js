@@ -1,6 +1,9 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
 const Users = db.Users;
+const Products = db.Products;
+const Orders = db.Orders;
+const OrderProducts = db.OrderProducts;
 
 const signUp = async (req, res) => {
     try {
@@ -113,9 +116,44 @@ const editUser = async (req, res) => {
     }
 };
 
+const fetchUserOrders = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Fetch user by email to ensure user exists
+        const user = await Users.findOne({
+            where: { email }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Fetch orders for the user including order details
+        const orders = await Orders.findAll({
+            where: { userId: email },
+            include: [{
+                model: OrderProducts,
+                include: [{
+                    model: Products,
+                    attributes: ['name', 'special', "img"]
+                    // attributes: { exclude: ['createdAt'] } 
+                }]
+            }]
+        });
+
+        // Return success response
+        res.status(200).json({ orders });
+    } catch (error) {
+        // Return error response
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     signUp,
     signIn,
     fetchUserByEmail,
     editUser,
+    fetchUserOrders
 };
