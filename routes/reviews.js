@@ -1,10 +1,10 @@
-// routes/users.js
+// routes/reviews.js
 const express = require('express');
 const router = express.Router();
 const reviewController = require('../controllers/reviewController');
 
-// Define the routes related to users
-router.post('/sign-up', reviewController.signUp);
-
+router.post('/create', reviewController.createReview);
+router.delete('/delete/:id', reviewController.deleteReview);
+router.patch('/edit:id', reviewController.editReview);
 
 module.exports = router;
