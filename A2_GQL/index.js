@@ -1,28 +1,7 @@
 var express = require("express")
-const { graphqlHTTP } = require("express-graphql");
-var { buildSchema } = require("graphql")
-const db = require("./models") 
-// Construct a schema, using GraphQL schema language
-var schema = buildSchema(`#graphql
-  type User {
-    name: String,
-    email: String,
-    password: String,
-    blocked: Boolean,
-    createdAt: String
-  }
-
-  type Query {
-    users: [User]
-  }
-`)
- 
-// The root provides a resolver function for each API endpoint
-var root = {
-  users: async () => {
-    return await db.Users.findAll();
-  },
-}
+const { graphqlHTTP } = require("express-graphql")
+const schema = require("./graphql/schema")
+const resolver = require("./graphql/resolver")
  
 var app = express()
  
@@ -31,7 +10,7 @@ app.all(
   "/graphql",
   graphqlHTTP({
     schema: schema,
-    rootValue: root,
+    rootValue: resolver,
     graphiql: true
   })
 )
