@@ -1,4 +1,8 @@
-const db = require("../models")
+const db = require("../models");
+const { PubSub } = require("graphql-subscriptions");
+const pubsub = new PubSub();
+
+const NEW_REVIEW = "NEW_REVIEW";
 
 var resolver = {
   // Query Operations
@@ -105,6 +109,17 @@ var resolver = {
 
     return true;
   },
-}
+  // Subscription Resolvers
+  newReview: {
+    subscribe: () => pubsub.asyncIterator([NEW_REVIEW])
+  }
+};
 
-module.exports = resolver
+// Publish new review when created
+const createReview = async (args) => {
+  const newReview = await db.Reviews.create(args.input);
+  pubsub.publish(NEW_REVIEW, { reviewAdded: newReview });
+  return newReview;
+};
+
+module.exports = resolver;

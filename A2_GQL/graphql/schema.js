@@ -78,6 +78,10 @@ var schema = buildSchema(`#graphql
       delete_product(id: ID): Boolean,
       toggle_review_state(id: ID): Boolean
     }
+
+    type Subscription {
+      newReview: Review
+    }
   `)
 
 module.exports = schema
