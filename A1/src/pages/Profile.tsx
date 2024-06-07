@@ -14,7 +14,7 @@ Profile.defaultProps = {
     active: 'account'
 };
 
-function Profile({active}: ProfileProps) {
+function Profile({ active }: ProfileProps) {
     // State to track the active tab
     const [activeTab, setActiveTab] = useState(active);
 

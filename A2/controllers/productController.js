@@ -38,8 +38,28 @@ const fetchProductReviews = async (req, res) => {
     }
 };
 
+const fetchProduct = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const product = await Products.findOne({
+            where: { id: productId },
+            include: [{
+                model: Reviews,
+            }]
+        });
+        if (product) {
+            res.status(200).json({ product: product });
+        } else {
+            res.status(404).json({ error: 'Product not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 module.exports = {
     fetchAllProducts,
     fetchProductReviews,
+    fetchProduct,
 };

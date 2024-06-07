@@ -12,6 +12,7 @@ db.Products = require('./Products')(sequelize, Sequelize.DataTypes);
 db.Reviews = require('./Reviews')(sequelize, Sequelize.DataTypes);
 db.Orders = require('./Orders')(sequelize, Sequelize.DataTypes);
 db.OrderProducts = require('./OrderProducts')(sequelize, Sequelize.DataTypes);
+db.Carts = require('./Carts')(sequelize, Sequelize.DataTypes);
 
 // Define associations
 Object.keys(db).forEach(modelName => {
@@ -20,7 +21,7 @@ Object.keys(db).forEach(modelName => {
     }
 });
 
-db.sequelize.sync({force: false})
+db.sequelize.sync({force: false, logging: false})
 .then(() => {
     console.log("DataBase is in sync");
 });

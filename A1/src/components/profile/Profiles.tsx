@@ -1,7 +1,7 @@
 function Profiles() {
     return (
         <>
-
+            HD Part for Assignment 1
         </>
     );
 };

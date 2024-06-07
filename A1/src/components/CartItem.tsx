@@ -1,38 +1,57 @@
+// CartItem.tsx
+import React from 'react';
+import api from '../api';
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+
 interface CartItemProps {
     item: {
-        imageUrl: string;
-        name: string;
-        color: string;
-        size: string;
+        id: number;
+        productId: number;
+        userId: string;
         quantity: number;
-        stockStatus: string;
-        price: number;
+        Product: {
+            id: number;
+            name: string;
+            img: string;
+            price: number;
+            special: boolean;
+        };
     };
+    onRemove: (productId: number) => void;
 }
 
-function CartItem(props: CartItemProps) {
-    const { item } = props;
+const CartItem: React.FC<CartItemProps> = ({ item, onRemove }) => {
+    const { Product, quantity } = item;
+
+    const handleRemove = () => {
+        const userId = Cookies.get('user');
+        api.post('/carts/remove', { productId: Product.id, userId })
+            .then(response => {
+                onRemove(Product.id);
+                toast.success(Product.name + ' removed from cart');
+                console.log('Product removed from cart:', response.data);
+            })
+            .catch(error => {
+                console.error('Failed to remove product from cart:', error);
+            });
+    };
 
     return (
         <div className="flex justify-between items-start border-b pb-4">
             <div className="flex space-x-4">
-                <img src={item.imageUrl} alt={item.name} className="w-24 h-24 object-cover" />
+                <img src={Product.img} alt={Product.name} className="w-24 h-24 object-cover" />
                 <div>
-                    <h2 className="font-semibold">{item.name}</h2>
-                    <p className="text-sm text-zinc-600">{item.color}</p>
-                    <p className="text-sm text-zinc-600">{item.size}</p>
-                    <p className="text-sm text-green-500 flex items-center mt-1">
-                        <svg className="w-4 h-4 mr-1 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7.629 14.571L3.149 10.09l1.414-1.414 3.066 3.066 5.656-5.657 1.415 1.415-7.071 7.072z" /></svg>
-                        {item.stockStatus}
-                    </p>
+                    <h2 className="font-semibold">{Product.name}</h2>
+                    {Product.special && <span className="font-semibold text-xs text-yellow-700">(Special)</span>}
                 </div>
             </div>
             <div className="text-right">
-                <p className="text-lg font-semibold">{item.quantity + ` x ` + `$` + item.price.toFixed(2)}</p>
-                <button className="text-green-600 hover:text-green-700 mt-1">Remove</button>
+                <p className="text-lg font-semibold">{quantity} x ${Product.price.toFixed(2)}</p>
+                <button className="text-green-600 hover:text-green-700 mt-1" onClick={handleRemove}>Remove</button>
             </div>
         </div>
     );
-}
+};
 
 export default CartItem;

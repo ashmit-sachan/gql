@@ -2,7 +2,7 @@ function Plans() {
     return (
         <div>
             {/* Your component content goes here */}
-            Plans
+            HD Part for Assignment 1
         </div>
     );
 };
